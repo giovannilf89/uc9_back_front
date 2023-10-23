@@ -1,0 +1,40 @@
+.loginInicio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  h1 {
+    background-color: #6bf8ce;
+    height: 4rem;
+    padding: 0.5rem;
+    width: 100%;
+    text-align: center;
+  }
+}
+.formInicio {
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    label {
+      margin-top: 1rem;
+    }
+
+    input {
+      padding: 0.3rem;
+      border-radius: 0.5rem;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 0.3rem;
+      border-radius: 0.5rem;
+    }
+  }
+  p {
+    text-align: center;
+    margin-top: 1rem;
+  }
+}
