@@ -7,18 +7,22 @@ interface Payload {
 
 export function isAutenticado(req: Request, res: Response, next: NextFunction) {
   const autetToken = req.headers.authorization;
+  // console.log(autetToken); // testar se o token esta chegando
 
   if (!autetToken) {
-    return res.status(401).end();
+    // return res.status(401).end(); // tratar condicional fora do try
+    return res.json({ dados: "Token Invalido" }); // tratar condicional dentro do try
   }
 
-  const [, token] = autetToken.split(" ");
+  const [, token] = autetToken.split(" "); // separa o token
 
   try {
     const { sub } = verify(token, process.env.JWT_SECRET) as Payload;
-    console.log(sub);
+    req.user_id = sub;
+    // console.log(sub);
     return next();
   } catch (err) {
-    return res.status(401).end();
+    // return res.status(401).end(); // tratar condicional fora do try
+    return res.json({ dados: "Token Invalido" }); // tratar condicional dentro do try
   }
 }

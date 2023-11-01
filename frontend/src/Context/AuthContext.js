@@ -8,9 +8,24 @@ export default function AuthProvider({ children }) {
   // children herda as funcionalidades do pai
 
   const [user, setUser] = useState("");
-  const [token, setToken] = useState("");
 
-  const isAutenthicated = !!user; // determina se o usuario esta logado ou não (! vazio ou falso / !! se for verdadeiro )
+  const isAutenthicated = !!user; // determina se o usuario esta logado ou não (! vazio ou falso / !! se for verdadeiro )(vira booleano)
+
+  const iToken = localStorage.getItem("@tklogin2023");
+  const token = JSON.parse(iToken); // convertendo string para objeto
+
+  async function loginToken() {
+    try {
+      const resposta = await api.get("/ListarUsuarioToken", {
+        headers: {
+          Authorization: "Bearer " + `${token}`,
+        },
+      });
+      console.log(resposta);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   async function signIn({ email, password }) {
     // recebe desconstruida ({})
@@ -25,6 +40,8 @@ export default function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ signIn }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ signIn, loginToken }}>
+      {children}
+    </AuthContext.Provider>
   );
 }
