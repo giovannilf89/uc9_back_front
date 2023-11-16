@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
-import { AuthContext } from "../Context/AuthContext";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./inicio.estilo.scss";
 import { toast } from "react-toastify";
@@ -10,13 +9,10 @@ export default function Inicio() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signIn } = useContext(AuthContext);
-
-  const iToken = localStorage.getItem("@tklogin2023");
-  const token = JSON.parse(iToken);
-  // console.log(token);
-
   useEffect(() => {
+    const iToken = localStorage.getItem("@tklogin2023");
+    const token = JSON.parse(iToken);
+    // console.log(token);
     if (!token) {
       navigation("/");
       return;
@@ -40,22 +36,23 @@ export default function Inicio() {
 
   async function handleLogin(e) {
     e.preventDefault();
-    // console.log(email, password);
-    let data = {
-      // recebe json do front
-      email,
-      password,
-    };
-
-    const resposta = await signIn(data);
-    // console.log(resposta);
-    if (!resposta) {
-      toast.error("Erro de login");
-    } else if (resposta) {
-      const token = resposta.data.token;
-      localStorage.setItem("@tklogin2023", JSON.stringify(token)); // nome (qualquer) tklogin2023 da key para armazenar o token(local storage) (local storage só aceita string)
-      toast.success("Login efetuado com sucesso");
-      navigation("/Dashboard");
+    if (!email || !password) {
+      toast.warn("Existem campos em Branco");
+    }
+    try {
+      const resposta = await apiLocal.post("/LoginUsuarios", {
+        email,
+        password,
+      });
+      if (resposta.data.id) {
+        const token = resposta.data.token;
+        localStorage.setItem("@tklogin2023", JSON.stringify(token)); // transformando token em string e armazenando no localstorage
+        toast.success("Login efetuado com sucesso");
+        navigation("/Dashboard");
+      }
+    } catch (err) {
+      // console.log(err.response.data.error);
+      toast.error(err.response.data.error);
     }
   }
 
@@ -87,3 +84,26 @@ export default function Inicio() {
     </div>
   );
 }
+
+// login usando authcontext
+
+// async function handleLogin(e) {
+//   e.preventDefault();
+//   // console.log(email, password);
+//   let data = {  // criar objeto e enviar via contexto
+//     // recebe json do front
+//     email,
+//     password,
+//   };
+
+//   const resposta = await signIn(data);
+//   // console.log(resposta);
+//   if (!resposta) {
+//     toast.error("Erro de login");
+//   } else if (resposta) {
+//     const token = resposta.data.token;
+//     localStorage.setItem("@tklogin2023", JSON.stringify(token)); // nome (qualquer) tklogin2023 da key para armazenar o token(local storage) (local storage só aceita string)
+//     toast.success("Login efetuado com sucesso");
+//     navigation("/Dashboard");
+//   }
+// }

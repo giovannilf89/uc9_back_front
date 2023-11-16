@@ -34,7 +34,7 @@ class LoginServices {
 
       {
         subject: usuario.id,
-        expiresIn: 30,
+        expiresIn: "24h",
       }
     );
     return {

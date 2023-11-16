@@ -23,6 +23,6 @@ export function isAutenticado(req: Request, res: Response, next: NextFunction) {
     return next();
   } catch (err) {
     // return res.status(401).end(); // tratar condicional fora do try
-    return res.json({ dados: "Token Invalido" }); // tratar condicional dentro do try
+    return res.json({ dados: "Token Expirado" }); // tratar condicional dentro do try
   }
 }

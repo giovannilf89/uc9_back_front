@@ -20,6 +20,19 @@ export default function Produtos() {
   const token = JSON.parse(iToken); // convertendo para JSON
 
   useEffect(() => {
+    async function loadCategorias() {
+      const resposta = await apiLocal.get("/ListarCategoria", {
+        headers: {
+          Authorization: "Bearer " + `${token}`,
+        },
+      });
+      // console.log(resposta);
+      setCategoria(resposta.data);
+    }
+    loadCategorias();
+  }, []);
+
+  useEffect(() => {
     if (!token) {
       navigation("/");
       return;
@@ -71,7 +84,11 @@ export default function Produtos() {
       data.append("categoriaId", categoriaId);
       data.append("file", imagem);
 
-      const resposta = await apiLocal.post("/CriarProdutos", data); //data é a caixinha com todas as infos que vai pro backend
+      const resposta = await apiLocal.post("/CriarProdutos", data, {
+        headers: {
+          Authorization: "Bearer " + `${token}`, // `${token}` executando alguma coisa, const ou var
+        },
+      }); //data é a caixinha com todas as infos que vai pro backend
       // console.log(resposta);
       toast.success(resposta.data.dados);
       // window.location.reload();

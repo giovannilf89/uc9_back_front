@@ -32,10 +32,16 @@ export default function Dashboard() {
     }
   }, []);
 
+  function handleSair() {
+    localStorage.removeItem("@tklogin2023"); // remove apenas o token da aplicação
+    navigation("/");
+  }
+
   return (
     <div>
       <h1>Dashboard</h1>
       <Link to="/Produtos">Cadastrar Produtos</Link>
+      <button onClick={handleSair}>Sair</button>
     </div>
   );
 }
